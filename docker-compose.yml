@@ -1,11 +1,23 @@
-version: "3.3"
+version: '3.7'
+
 services:
-  postgres:
-    container_name: lappis
-    environment:
-      - POSTGRES_USER=lappis
-      - POSTGRES_PASSWORD=lappis
-      - POSTGRES_DB=lappis
+  mongo:
+    image: mongo:latest
+    container_name: mongodb
+    restart: always
+    environment: 
+      MONGO_INITDB_ROOT_USERNAME: lappis
+      MONGO_INITDB_ROOT_PASSWORD: lappis
+    ports: 
+      - 27017:27017
+
+  app:
+    image: app:final
+    build:
+      context: src
+      dockerfile: dockerfile
+    command: ["python", "src/main.py"]
     ports:
-      - "5432:5432"
-    image: postgres
+      - 8000:8000
+    depends_on:
+      - mongo
