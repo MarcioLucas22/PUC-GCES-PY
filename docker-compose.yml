@@ -16,8 +16,35 @@ services:
     build:
       context: src
       dockerfile: dockerfile
-    command: ["python", "src/main.py"]
+    command: ["python", "main.py"]
     ports:
       - 8000:8000
     depends_on:
       - mongo
+
+  postgres:
+    image: postgres:latest
+    container_name: metabase
+    restart: always
+    environment:
+            POSTGRES_DB: metabase
+            POSTGRES_USER: lappis
+            POSTGRES_PASSWORD: lappis
+
+  metabase:
+    image: metabase
+    container_name: metabase
+    restart: always
+    environment:
+            MB_DB_TYPE: postgres
+            MB_DB_DBNAME: metabase
+            MB_DB_PORT: 5432
+            MB_DB_USER: lappis
+            MB_DB_PASS: lappis
+            MB_DB_HOST: postgres
+    depends_on:
+            - postgres
+    volumes:
+            - .:/metabase
+    ports:
+            - 3000:3000
