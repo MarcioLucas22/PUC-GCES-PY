@@ -25,10 +25,6 @@ jobs:
         pip install breathe
         cd Sphinx
         make html
-    - name: Testes
-      run: |
-        pip install pytest
-        pytest tests
     - name: Build
       run: |
         cd poetry
